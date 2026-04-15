@@ -35,6 +35,8 @@ bin/
 *.iml
 *.ipr
 out/
+modules.xml
+library-app.iml
 
 # NetBeans
 nbproject/private/
