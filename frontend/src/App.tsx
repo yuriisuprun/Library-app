@@ -122,12 +122,12 @@ function App() {
       </header>
 
       <main className="app-main">
-        <section id="home" className="hero-section">
-          <div className="section-container">
-            <h2>Welcome to Your Personal Library</h2>
-            <p>Manage your book collection with ease. Search, add, and organize your favorite reads.</p>
-          </div>
-        </section>
+        {/*<section id="home" className="hero-section">*/}
+        {/*  <div className="section-container">*/}
+        {/*    <h2>Welcome to Your Personal Library</h2>*/}
+        {/*    <p>Manage your book collection with ease. Search, add, and organize your favorite reads.</p>*/}
+        {/*  </div>*/}
+        {/*</section>*/}
 
         {/* Search Section */}
         <section id="books" className="search-section">
