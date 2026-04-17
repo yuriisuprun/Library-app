@@ -131,7 +131,7 @@ function App() {
       <header className="app-header">
         <div className="header-container">
           <div className="logo-section">
-            <h1>Library</h1>
+            <h1>LIBRARY</h1>
             <p className="tagline">Book collection manager</p>
           </div>
           <nav className="main-nav">
