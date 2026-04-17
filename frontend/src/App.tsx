@@ -131,7 +131,11 @@ function App() {
       <header className="app-header">
         <div className="header-container">
           <div className="logo-section">
-            <h1>LIBRARY</h1>
+            <a href="#home" className="logo-link" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <div className="logo">
+                <span className="logo-text">LIBRARY</span>
+              </div>
+            </a>
             <p className="tagline">Book collection manager</p>
           </div>
           <nav className="main-nav">
