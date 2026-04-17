@@ -366,7 +366,7 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-container">
-          <p>&copy; 2024 Library App. All rights reserved.</p>
+          <p>&copy; 2026 Library App. All rights reserved.</p>
           <nav className="footer-nav">
             <ul>
               <li><a href="#privacy">Privacy Policy</a></li>
