@@ -27,6 +27,8 @@ function App() {
   const [isSearching, setIsSearching] = useState(false)
   const [searchType, setSearchType] = useState<'all' | 'title' | 'author' | 'isbn' | 'year'>('all')
   const [showAddBookModal, setShowAddBookModal] = useState(false)
+  const [editingBook, setEditingBook] = useState<Book | null>(null)
+  const [editFormData, setEditFormData] = useState<Book>({ title: '', author: '' })
 
   useEffect(() => {
     fetchBooks()
@@ -177,6 +179,41 @@ function App() {
     }
   }
 
+  const startEditBook = (book: Book) => {
+    setEditingBook(book)
+    setEditFormData({ ...book })
+  }
+
+  const cancelEditBook = () => {
+    setEditingBook(null)
+    setEditFormData({ title: '', author: '' })
+  }
+
+  const saveEditBook = async () => {
+    if (!editingBook?.id) return
+
+    try {
+      const payload: Book = {
+        ...editFormData,
+        isbn: editFormData.isbn?.trim() || undefined,
+        publisher: editFormData.publisher?.trim() || undefined,
+        genre: editFormData.genre?.trim() || undefined,
+        country: editFormData.country?.trim() || undefined,
+        language: editFormData.language?.trim() || undefined,
+        description: editFormData.description?.trim() || undefined,
+        coverImageUrl: editFormData.coverImageUrl?.trim() || undefined,
+        pageCount: editFormData.pageCount && editFormData.pageCount > 0 ? editFormData.pageCount : undefined,
+        publishedYear: typeof editFormData.publishedYear === 'number' ? editFormData.publishedYear : undefined,
+      }
+
+      await axios.put(`http://localhost:8080/api/books/${editingBook.id}`, payload)
+      fetchBooks()
+      cancelEditBook()
+    } catch (error) {
+      console.error('Error updating book:', error)
+    }
+  }
+
   return (
     <div className="App">
       <header className="app-header">
@@ -250,61 +287,162 @@ function App() {
               {isSearching && <span className="results-count">{books.length} result{books.length !== 1 ? 's' : ''}</span>}
             </div>
             {books.length === 0 ? (
-              <p className="no-books">No books found. Start adding your first book or try a different search.</p>
+              <div className="no-books">
+                <p>No books found. Start adding your first book or try a different search.</p>
+              </div>
             ) : (
-              <div className="books-grid">
-                {books.map((book) => (
-                  <article key={book.id} className="book-card">
-                    <div className="book-content">
-                      <h3>{book.title}</h3>
-                      <dl className="book-metadata">
-                        <div className="metadata-item">
-                          <dt>Author</dt>
-                          <dd>{book.author}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>ISBN</dt>
-                          <dd className="isbn-code">{book.isbn || '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Published</dt>
-                          <dd>{typeof book.publishedYear === 'number' ? book.publishedYear : '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Publisher</dt>
-                          <dd>{book.publisher || '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Genre</dt>
-                          <dd>{book.genre || '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Audience</dt>
-                          <dd>{book.targetAudience ? book.targetAudience.replace('_', ' ') : '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Country</dt>
-                          <dd>{book.country || '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Language</dt>
-                          <dd>{book.language || '—'}</dd>
-                        </div>
-                        <div className="metadata-item">
-                          <dt>Pages</dt>
-                          <dd>{typeof book.pageCount === 'number' ? book.pageCount : '—'}</dd>
-                        </div>
-                      </dl>
-                    </div>
-                    <button
-                      onClick={() => book.id && deleteBook(book.id)}
-                      className="delete-btn"
-                      aria-label={`Delete ${book.title}`}
-                    >
-                      Remove
-                    </button>
-                  </article>
-                ))}
+              <div className="table-container">
+                <table className="books-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Author</th>
+                      <th>Year</th>
+                      <th>Genre</th>
+                      <th>Publisher</th>
+                      <th>Pages</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {books.map((book) => (
+                      <tr key={book.id} className={editingBook?.id === book.id ? 'editing' : ''}>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="text"
+                              value={editFormData.title}
+                              onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                              className="table-input"
+                              autoFocus
+                            />
+                          ) : (
+                            <div className="book-title" title={book.title}>
+                              {book.title}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="text"
+                              value={editFormData.author}
+                              onChange={(e) => setEditFormData({ ...editFormData, author: e.target.value })}
+                              className="table-input"
+                            />
+                          ) : (
+                            <div className="book-author" title={book.author}>
+                              {book.author}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="number"
+                              value={editFormData.publishedYear ?? ''}
+                              onChange={(e) => {
+                                const v = e.target.value.trim()
+                                setEditFormData({ ...editFormData, publishedYear: v ? parseInt(v, 10) : undefined })
+                              }}
+                              className="table-input table-input-small"
+                            />
+                          ) : (
+                            <span className="book-year">
+                              {book.publishedYear || '—'}
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="text"
+                              value={editFormData.genre ?? ''}
+                              onChange={(e) => setEditFormData({ ...editFormData, genre: e.target.value })}
+                              className="table-input"
+                            />
+                          ) : (
+                            <span className="book-genre" title={book.genre}>
+                              {book.genre || '—'}
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="text"
+                              value={editFormData.publisher ?? ''}
+                              onChange={(e) => setEditFormData({ ...editFormData, publisher: e.target.value })}
+                              className="table-input"
+                            />
+                          ) : (
+                            <span className="book-publisher" title={book.publisher}>
+                              {book.publisher || '—'}
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          {editingBook?.id === book.id ? (
+                            <input
+                              type="number"
+                              value={editFormData.pageCount ?? ''}
+                              onChange={(e) => {
+                                const v = e.target.value.trim()
+                                setEditFormData({ ...editFormData, pageCount: v ? parseInt(v, 10) : undefined })
+                              }}
+                              className="table-input table-input-small"
+                              min="1"
+                            />
+                          ) : (
+                            <span className="book-pages">
+                              {book.pageCount || '—'}
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="action-buttons">
+                            {editingBook?.id === book.id ? (
+                              <>
+                                <button
+                                  onClick={saveEditBook}
+                                  className="save-btn"
+                                  disabled={!editFormData.title.trim() || !editFormData.author.trim()}
+                                  title="Save changes"
+                                >
+                                  ✓
+                                </button>
+                                <button
+                                  onClick={cancelEditBook}
+                                  className="cancel-edit-btn"
+                                  title="Cancel editing"
+                                >
+                                  ✕
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => startEditBook(book)}
+                                  className="edit-btn"
+                                  title="Edit book"
+                                >
+                                  ✎
+                                </button>
+                                <button
+                                  onClick={() => book.id && deleteBook(book.id)}
+                                  className="delete-btn-table"
+                                  title="Delete book"
+                                >
+                                  🗑
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

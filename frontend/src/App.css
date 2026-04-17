@@ -629,114 +629,219 @@ h2 {
   border-radius: var(--border-radius-md);
 }
 
-.books-grid {
-  display: grid;
-  gap: var(--spacing-lg);
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-}
+/* ============================================
+   Books Table Styles
+   ============================================ */
 
-.book-card {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
+.table-container {
+  overflow-x: auto;
   border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  transition: box-shadow var(--transition-base), transform var(--transition-base),
-    border-color var(--transition-base);
-  position: relative;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
 }
 
-.book-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: #d0d0d0;
-  transform: translateY(-2px);
-}
-
-.book-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.book-card h3 {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.book-metadata {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--spacing-sm);
-  list-style: none;
-}
-
-.metadata-item {
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: var(--spacing-md);
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.9375rem;
 }
 
-.metadata-item dt {
+.books-table thead {
+  background-color: var(--color-bg-tertiary);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.books-table th {
+  padding: var(--spacing-md) var(--spacing-sm);
+  text-align: left;
   font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.books-table th:first-child {
+  padding-left: var(--spacing-lg);
+}
+
+.books-table th:last-child {
+  padding-right: var(--spacing-lg);
+  text-align: center;
+}
+
+.books-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.books-table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.books-table tbody tr.editing {
+  background-color: #f0f9ff;
+  border-left: 3px solid var(--color-accent);
+}
+
+.books-table td {
+  padding: var(--spacing-md) var(--spacing-sm);
+  vertical-align: middle;
+  color: var(--color-text-primary);
+}
+
+.books-table td:first-child {
+  padding-left: var(--spacing-lg);
+}
+
+.books-table td:last-child {
+  padding-right: var(--spacing-lg);
+  text-align: center;
+}
+
+.book-title,
+.book-author {
+  font-weight: 500;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-title {
+  color: var(--color-text-primary);
+}
+
+.book-author {
   color: var(--color-text-secondary);
 }
 
-.metadata-item dd {
-  margin: 0;
-  color: var(--color-text-primary);
-  word-break: break-word;
+.book-year,
+.book-genre,
+.book-publisher,
+.book-pages {
+  color: var(--color-text-secondary);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.isbn-code {
-  font-family: 'Monaco', 'Courier', monospace;
-  font-size: 0.875rem;
-  background-color: var(--color-bg-tertiary);
+.table-input {
+  width: 100%;
   padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
-}
-
-.delete-btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--color-neutral);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-family: inherit;
-  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
-  align-self: flex-start;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.delete-btn:hover {
-  background-color: var(--color-neutral-hover);
-}
-
-.delete-btn:active {
-  transform: translateY(1px);
-}
-
-.delete-btn:focus {
+.table-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.15);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.1);
+}
+
+.table-input-small {
+  max-width: 80px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-btn,
+.delete-btn-table,
+.save-btn,
+.cancel-edit-btn {
+  padding: var(--spacing-xs);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.edit-btn {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.edit-btn:hover {
+  background-color: var(--color-action-green);
+  color: var(--color-text-primary);
+  transform: translateY(-1px);
+}
+
+.delete-btn-table {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.delete-btn-table:hover {
+  background-color: var(--color-error);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background-color: var(--color-action-green);
+  color: var(--color-text-primary);
+}
+
+.save-btn:hover:not(:disabled) {
+  background-color: var(--color-action-green-hover);
+  transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-edit-btn {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.cancel-edit-btn:hover {
+  background-color: var(--color-error);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.edit-btn:focus,
+.delete-btn-table:focus,
+.save-btn:focus,
+.cancel-edit-btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .no-books {
   text-align: center;
+  padding: var(--spacing-xxl);
   color: var(--color-text-secondary);
-  padding: var(--spacing-xl) var(--spacing-md);
-  font-size: 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.no-books p {
   margin: 0;
+  font-size: 1rem;
 }
 
 /* ============================================
@@ -863,6 +968,53 @@ h2 {
     align-self: stretch;
   }
 
+  /* Table responsive styles */
+  .table-container {
+    border-radius: var(--border-radius-md);
+  }
+
+  .books-table {
+    font-size: 0.875rem;
+  }
+
+  .books-table th,
+  .books-table td {
+    padding: var(--spacing-sm) var(--spacing-xs);
+  }
+
+  .books-table th:first-child,
+  .books-table td:first-child {
+    padding-left: var(--spacing-sm);
+  }
+
+  .books-table th:last-child,
+  .books-table td:last-child {
+    padding-right: var(--spacing-sm);
+  }
+
+  .book-title,
+  .book-author {
+    max-width: 120px;
+  }
+
+  .book-genre,
+  .book-publisher {
+    max-width: 80px;
+  }
+
+  .action-buttons {
+    gap: 2px;
+  }
+
+  .edit-btn,
+  .delete-btn-table,
+  .save-btn,
+  .cancel-edit-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+
   .search-section,
   .add-book-section,
   .books-section {
@@ -943,6 +1095,53 @@ h2 {
   .books-section {
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-md);
+  }
+
+  /* Mobile table styles */
+  .books-table {
+    font-size: 0.8125rem;
+  }
+
+  .books-table th {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs);
+  }
+
+  .books-table td {
+    padding: var(--spacing-xs);
+  }
+
+  .book-title,
+  .book-author {
+    max-width: 100px;
+    font-size: 0.8125rem;
+  }
+
+  .book-genre,
+  .book-publisher,
+  .book-year,
+  .book-pages {
+    max-width: 60px;
+    font-size: 0.75rem;
+  }
+
+  .table-input {
+    font-size: 0.8125rem;
+    padding: 2px var(--spacing-xs);
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .edit-btn,
+  .delete-btn-table,
+  .save-btn,
+  .cancel-edit-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
   }
 }
 
