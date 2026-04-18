@@ -18,8 +18,7 @@
     </filter>
   </defs>
 
-  <!-- Background circle for contrast and modern look -->
-<!--  <circle cx="50" cy="50" r="48" fill="#ffffff" filter="url(#shadow)" />-->
+  <!-- Transparent background -->
 
   <!-- Book left cover/spine -->
   <path d="M 28 25 L 28 75 Q 28 78 31 78 L 50 78 L 50 25 Z"
