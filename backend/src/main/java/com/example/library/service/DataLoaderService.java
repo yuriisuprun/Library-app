@@ -81,8 +81,8 @@ public class DataLoaderService implements CommandLineRunner {
                     "Editore Italiano",
                     "Fiction",
                     TargetAudience.ADULT,
-                    "IT",
-                    "it",
+                    "Italy",
+                    "Italian",
                     320,
                     "Un romanzo avvincente che racconta la storia di Elia e la sua ricerca interiore attraverso paesaggi italiani mozzafiato."
                 );
@@ -99,8 +99,8 @@ public class DataLoaderService implements CommandLineRunner {
                     "Casa Editrice Contemporanea",
                     "Contemporary",
                     TargetAudience.YOUNG_ADULT,
-                    "IT",
-                    "it",
+                    "Italy",
+                    "Italian",
                     280,
                     "Una narrazione dinamica e coinvolgente che esplora temi contemporanei attraverso dialoghi brillanti e situazioni inaspettate."
                 );
